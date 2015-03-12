@@ -542,8 +542,16 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	public int calculateThreeOfAKindRank() {
 		final int maxTwoPairRank = 4995; // maximum rank of the next lower showdown category
 		final int maxKickerRank = 66;  // sum of kicker combinations for each set of trips = 12*11/2
-		int kickerRank =	distinguishers[1] * (distinguishers[1]-1) /2 +
-							distinguishers[2];
+		int reducedKicker1 = distinguishers[2];
+		int reducedKicker2 = distinguishers[3];
+		if (distinguishers[2] > distinguishers[1]) {
+			reducedKicker1--; // decrement if kicker is greater than three of a kind pip value
+		}
+		if (distinguishers[3] > distinguishers[1]) {
+			reducedKicker2--; // decrement if kicker is greater than three of a kind pip value
+		}
+		int kickerRank =	reducedKicker1 * (reducedKicker1-1) /2 +
+							reducedKicker2;
 		return maxTwoPairRank + 1 + //start at the rank just higher than lower showdown category
 				distinguishers[1] * maxKickerRank +
 				kickerRank; // add the rank of this specific set of kickers

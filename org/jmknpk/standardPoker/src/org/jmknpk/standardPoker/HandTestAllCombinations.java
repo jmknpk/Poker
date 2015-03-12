@@ -52,9 +52,10 @@ public class HandTestAllCombinations {
 		priorD[0] = -1;
 		int priorRank=-1;
 		for (int i = 0; i < intuitiveHands.length; i++) {
-			String temp = "";
+			String temp;
 			int[] d;
 			boolean distinguishersChanged;
+			boolean ranksChanged;
 			d = intuitiveHands[i].getDistinguishers();
 			distinguishersChanged = false;
 			if (d.length == priorD.length) {
@@ -67,14 +68,22 @@ public class HandTestAllCombinations {
 				distinguishersChanged = true;
 			}
 			if (priorRank == intuitiveHands[i].getHandRank()) {
-				if (distinguishersChanged) {
-					temp = "PROBLEM: DistinguishersChangedWithoutRankChange";
-				}
+				ranksChanged = false;
 			} else {
-				if (!distinguishersChanged) {
-					temp = "PROBLEM: RankChangedWithoutDistinguisherChange";
+				ranksChanged = true;
+			}
+			assertEquals(ranksChanged,distinguishersChanged);
+			if (ranksChanged == distinguishersChanged) {
+				temp = "";
+			} else {
+				if (ranksChanged) {
+					temp = "PROBLEM: Rank Changed without Distinguishers Change.";
+				} else {
+					temp = "PROBLEM: Distinguishers changed without Rank change.";
 				}
 			}
+
+/*			
 			String dString = "";
 			for (int j = 0; j < d.length; j++) {
 				if (j > 0) {
@@ -92,19 +101,28 @@ public class HandTestAllCombinations {
 				bw.write(outString,0,outString.length());
 				bw.newLine();
 			} catch (IOException e) {}
+*/
+
 			priorD = d;
 			priorRank = intuitiveHands[i].getHandRank();
 		}
 
-/*		
 		
 		Arrays.sort(valueHands,Hand.RankThenValueComparator);  // Sort by handValue
 		
 		for (int i = 0; i < valueHands.length; i++) {
-			assertEquals(valueHands[i].getHandRank(),intuitiveHands[i].getHandRank());
+			
+//			assertEquals(valueHands[i].getHandRank(),intuitiveHands[i].getHandRank());
+			outString = "i="+Integer.toString(i)+
+					" "+valueHands[i].getAbbreviation()+
+					" "+intuitiveHands[i].getAbbreviation();
+			try {
+				bw.write(outString,0,outString.length());
+				bw.newLine();
+			} catch (IOException e) {}
 		}
-*/
 		
+
 /*
 		for (int i = 0; i < valueHands.length; i++) {
 			System.out.println(Integer.toString(valueHands[i].getHandRank())+","+Integer.toString(valueHands[i].getValue())+","+valueHands[i].getCardSet().getAbbreviation());
