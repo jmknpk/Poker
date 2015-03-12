@@ -11,7 +11,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	private ShowdownCategoryName categoryName;
 	private boolean isFlush;
 	private int[] distinguishers;
-	private int handValue; // handValue ranges from 0 to 2,598,959 for 2,598,959 different hands.  
+	private int handValue; // handValue ranges from 0 to 2,598,959 for 2,598,960 different hands.  
 // handValue is unique for all Non-ordered combinations of a set of 52 distinct cards.  
 // AcAdAh2c2d has a different handValue from AcAdAh2c2s.  But 2dAcAdAh2c has the same handValue as AcAdAh2c2d (i.e. order is ignored).
 	private int handRank;  // handRank of hands ranges from 0 to 7461.  
@@ -50,6 +50,36 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 			}
 		}
 	};
+
+	public static final Comparator<Hand> IntuitiveComparator = new Comparator<Hand>() {
+		public int compare(Hand h1, Hand h2) {
+			int[] d1;
+			int[] d2;
+			if (h1 == null || h2 == null) {
+				throw new NullPointerException();
+			} else {
+				d1 = h1.getDistinguishers();
+				d2 = h2.getDistinguishers();
+				int comparison = 0;
+				for (int i = 0; i < d1.length && i < d2.length && comparison == 0; i++) {
+					if (d1[i] > d2[i]) {
+						comparison = 1;
+					} else if (d1[i] < d2[i]) {
+						comparison = -1;
+					}
+				if (comparison == 0) {
+					if (h1.getValue() >h2.getValue()) {
+						comparison = 1;
+					} else if (h1.getValue() < h2.getValue()) {
+						comparison = -1;
+					}
+				}
+				}
+				return comparison;
+			}
+		}
+	};
+	
 	
 	public Hand() {
 		this (new CardSet(	new Card(PipName.TWO,SuitName.DIAMOND),
@@ -464,7 +494,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	
 	public int calculateOnePairRank() {
 		final int maxHighCardRank = 1277; // maximum rank of the next lower showdown category
-		final int maxKickerRank = 220; // maximum rank of 3 card kicker combinations
+		final int maxKickerRank = 880; // maximum rank of 3 card kicker combinations = 12*11*10/3*2*1
 		int[] vals = new int[3];
 		// Calculate the rank of the three kicker cards
 		// calculations are based on non-ordered combination formula (n!) / ((n-r)!*(r!), n = # of items, r = # of selections
@@ -497,9 +527,16 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		// pip1 / 1
 		int pairSetRank =	distinguishers[1] * (distinguishers[1]-1) / 2 +
 							distinguishers[2];
+		int temp = distinguishers[3]; // for rank of the kicker
+		if (distinguishers[3] > distinguishers[1]) {
+			temp--; // Decrement if the kicker is greater than the greater of the pairs
+		}
+		if (distinguishers[3] > distinguishers[2]) {
+			temp--; // Decrement if the kicker is greater than the lesser of the pairs
+		}
 		return 	maxOnePairRank + 1 + //start at the rank just higher than lower showdown category
 				pairSetRank * maxKickerRank + //pair set rank * accumulation of kicker card possibilities for all lower pair sets
-				distinguishers[3]; // add the rank of the kicker
+				temp; // add the rank of the kicker
 	}
 
 	public int calculateThreeOfAKindRank() {
@@ -597,6 +634,18 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	
 	public String getAbbreviation() {
 		return cardSet.getAbbreviation();
+	}
+	
+	public ShowdownCategoryName getCategoryName() {
+		return categoryName;
+	}
+	
+	public int[] getDistinguishers() {
+		int[] temp = new int[distinguishers.length];
+		for (int i = 0; i < distinguishers.length; i++) {
+			temp[i] = distinguishers[i];
+		}
+		return temp;
 	}
 
 /* 	public static Comparator HandRankComparator = new Comparator<Hand>() {

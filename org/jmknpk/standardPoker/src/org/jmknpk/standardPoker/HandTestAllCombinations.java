@@ -1,7 +1,13 @@
 package org.jmknpk.standardPoker;
 
 import static org.junit.Assert.*;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
+
 import org.junit.Test;
 
 public class HandTestAllCombinations {
@@ -24,14 +30,89 @@ public class HandTestAllCombinations {
 				}
 			}
 		}
-		assertEquals(maxRank,7461);
-		assertEquals(handIndex,2598960);
+		assertEquals(12048,maxRank);
+		assertEquals(2598960,handIndex);
 
+		Hand[] intuitiveHands = new Hand[2598960];
+		for (int i = 0; i < valueHands.length; i++) {
+			intuitiveHands[i] = valueHands[i];
+		}
+		Arrays.sort(intuitiveHands,Hand.IntuitiveComparator); // Sort by intuitive method
+
+		String outString;
+		BufferedWriter bw = null;
+		try {
+			File file = new File("HandTestAllCombinations.txt");
+			if (!file.exists()) {file.createNewFile();}
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			bw = new BufferedWriter(fw);
+		} catch (IOException e) { };
+		
+		int[] priorD = new int[1];
+		priorD[0] = -1;
+		int priorRank=-1;
+		for (int i = 0; i < intuitiveHands.length; i++) {
+			String temp = "";
+			int[] d;
+			boolean distinguishersChanged;
+			d = intuitiveHands[i].getDistinguishers();
+			distinguishersChanged = false;
+			if (d.length == priorD.length) {
+				for (int j = 0; j < d.length; j++) {
+					if (d[j] != priorD[j]) {
+						distinguishersChanged = true;
+					}
+				}
+			} else {
+				distinguishersChanged = true;
+			}
+			if (priorRank == intuitiveHands[i].getHandRank()) {
+				if (distinguishersChanged) {
+					temp = "PROBLEM: DistinguishersChangedWithoutRankChange";
+				}
+			} else {
+				if (!distinguishersChanged) {
+					temp = "PROBLEM: RankChangedWithoutDistinguisherChange";
+				}
+			}
+			String dString = "";
+			for (int j = 0; j < d.length; j++) {
+				if (j > 0) {
+					dString = dString + ",";
+				}
+				dString = dString + Integer.toString(d[j]);
+			}
+			outString = "i="+Integer.toString(i)+
+						" rank="+Integer.toString(intuitiveHands[i].getHandRank())+
+						" distinguishers="+	dString +
+						" "+intuitiveHands[i].getAbbreviation()+
+						" "+intuitiveHands[i].getCategoryName()+
+						temp;
+			try {
+				bw.write(outString,0,outString.length());
+				bw.newLine();
+			} catch (IOException e) {}
+			priorD = d;
+			priorRank = intuitiveHands[i].getHandRank();
+		}
+
+/*		
+		
 		Arrays.sort(valueHands,Hand.RankThenValueComparator);  // Sort by handValue
 		
 		for (int i = 0; i < valueHands.length; i++) {
+			assertEquals(valueHands[i].getHandRank(),intuitiveHands[i].getHandRank());
+		}
+*/
+		
+/*
+		for (int i = 0; i < valueHands.length; i++) {
 			System.out.println(Integer.toString(valueHands[i].getHandRank())+","+Integer.toString(valueHands[i].getValue())+","+valueHands[i].getCardSet().getAbbreviation());
 		}
+*/
+		try {
+			bw.close();
+		} catch (IOException e) {}
 
 	}
 }
