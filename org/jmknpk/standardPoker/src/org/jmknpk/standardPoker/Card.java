@@ -104,7 +104,7 @@ public class Card implements Comparable<Card>, Comparator<Card> {
 			throw new NullPointerException();
 		} else if (a.length() == 2) {
 			String a1 = a.substring(0,1);
-			String a2 = a.substring(1,1);
+			String a2 = a.substring(1,2);
 			PipName p;
 			SuitName s;
 			switch (a1) {

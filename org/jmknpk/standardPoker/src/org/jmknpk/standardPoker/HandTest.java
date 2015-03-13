@@ -12,7 +12,7 @@ public class HandTest {
 	public void test() {
 
 		int z = 0;
-		Hand[] hands = new Hand[31];
+		Hand[] hands = new Hand[32];
 		
 		hands[z] = new Hand();
 		assertTrue(hands[z] != null);
@@ -406,6 +406,17 @@ public class HandTest {
 		assertEquals("3h3d3c4d4c",hands[z].getAbbreviation());
 		z++;
 
+		hands[z] = new Hand( new CardSet(
+											new Card(PipName.SEVEN,SuitName.CLUB),
+											new Card(PipName.SIX,SuitName.CLUB),
+											new Card(PipName.FOUR,SuitName.CLUB),
+											new Card(PipName.THREE,SuitName.CLUB),
+											new Card(PipName.TWO,SuitName.DIAMOND)));
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals("Seven high with Six, Four, Three, and Two",hands[z].getShowdownDescription());
+		assertEquals("High Card 76432",hands[z].getShortShowdownDescription());
+		assertEquals("7c6c4c3c2d",hands[z].getAbbreviation());
+		z++;
 
 
 		Arrays.sort(hands);

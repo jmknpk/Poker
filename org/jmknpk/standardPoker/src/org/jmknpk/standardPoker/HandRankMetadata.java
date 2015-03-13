@@ -49,7 +49,9 @@ public class HandRankMetadata {
 		int numberBelowRank = 0;
 		int numberBelowCurrentHand = 0;
 		int countHandsPerRank = 0;
+		int rankBegin = 0;
 		int[] temp;
+		int currCounter;
 		String[] tempS;
 		for (int i = 0; i < hands.length; i++) {
 			if (hands[i].getHandRank() != rank) {
@@ -57,22 +59,26 @@ public class HandRankMetadata {
 				numberOfHandsPerRank[rank] = countHandsPerRank;
 				numberOfHandsBelow[rank] = numberBelowRank;
 				numberOfHandsAbove[rank] = numberOfHands - numberBelowRank - countHandsPerRank;
+
 				temp = new int[countHandsPerRank];
-				for (int j = 0; j < countHandsPerRank; j++) {
-					temp[j] = hands[i-countHandsPerRank+j+1].getValue();
+				currCounter = 0;
+				for (int j = rankBegin; j < i; j++) {
+					temp[currCounter++] = hands[j].getValue();
 				}
 				handValuesPerRank[rank] = temp;
 
 				tempS = new String[countHandsPerRank];
+				currCounter = 0;
 				handAbbreviationsPerRank[rank] = new String[tempS.length];
-				for (int j = 0; j < countHandsPerRank; j++) {
-					tempS[j] = hands[i-countHandsPerRank+j+1].getAbbreviation();
-					handAbbreviationsPerRank[rank][j] = tempS[j];
+				for (int j = rankBegin; j < i; j++) {
+					tempS[currCounter] = hands[j].getAbbreviation();
+					handAbbreviationsPerRank[rank][currCounter] = tempS[currCounter++];
 				}
 //				handAbbreviationsPerRank[rank] = tempS;
 
 				// Finished storing the information for the prior rank.  Now continue with next rank.
 				rank++;
+				rankBegin = i;
 				numberBelowRank = numberBelowCurrentHand;
 				countHandsPerRank = 1;
 			} else {
@@ -85,16 +91,18 @@ public class HandRankMetadata {
 		numberOfHandsBelow[rank] = numberBelowRank;
 		numberOfHandsAbove[rank] = numberOfHands - numberBelowRank - countHandsPerRank;
 		temp = new int[countHandsPerRank];
-		for (int j = 0; j < countHandsPerRank; j++) {
-			temp[j] = hands[hands.length-countHandsPerRank+j].getValue();
+		currCounter = 0;
+		for (int j = rankBegin; j < hands.length; j++) {
+			temp[currCounter++] = hands[j].getValue();
 		}
 		
 		handValuesPerRank[rank] = temp;
 		tempS = new String[countHandsPerRank];
+		currCounter = 0;
 		handAbbreviationsPerRank[rank] = new String[tempS.length];
-		for (int j = 0; j < countHandsPerRank; j++) {
-			tempS[j] = hands[hands.length-countHandsPerRank+j].getAbbreviation();
-			handAbbreviationsPerRank[rank][j] = tempS[j];
+		for (int j = rankBegin; j < hands.length; j++) {
+			tempS[currCounter] = hands[j].getAbbreviation();
+			handAbbreviationsPerRank[rank][currCounter] = tempS[currCounter++];
 		}
 
 
