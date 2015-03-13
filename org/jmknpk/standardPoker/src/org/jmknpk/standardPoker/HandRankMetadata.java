@@ -18,6 +18,7 @@ public class HandRankMetadata {
 		numberOfHandsBelow = new int [numberOfHandRanks]; // a count of the number of hands evaluating to lesser ranks.
 		numberOfHandsAbove = new int [numberOfHandRanks]; // a count of the number of hands evaluating to higher ranks.
 		handValuesPerRank = new int[numberOfHandRanks][];
+		handAbbreviationsPerRank = new String[numberOfHandRanks][];
 		determineHandRankMetaData();
 	}
 	
@@ -61,13 +62,15 @@ public class HandRankMetadata {
 					temp[j] = hands[i-countHandsPerRank+j+1].getValue();
 				}
 				handValuesPerRank[rank] = temp;
-/*
+
 				tempS = new String[countHandsPerRank];
 				for (int j = 0; j < countHandsPerRank; j++) {
 					tempS[j] = hands[i-countHandsPerRank+j+1].getAbbreviation();
+					handAbbreviationsPerRank[rank] = new String[tempS.length];
+					handAbbreviationsPerRank[rank][j] = tempS[j];
 				}
-				handAbbreviationsPerRank[rank] = tempS;
-*/
+//				handAbbreviationsPerRank[rank] = tempS;
+
 				// Finished storing the information for the prior rank.  Now continue with next rank.
 				rank++;
 				numberBelowRank = numberBelowCurrentHand;
@@ -85,14 +88,15 @@ public class HandRankMetadata {
 		for (int j = 0; j < countHandsPerRank; j++) {
 			temp[j] = hands[hands.length-countHandsPerRank+j].getValue();
 		}
-/*		
+		
 		handValuesPerRank[rank] = temp;
 		tempS = new String[countHandsPerRank];
 		for (int j = 0; j < countHandsPerRank; j++) {
 			tempS[j] = hands[hands.length-countHandsPerRank+j].getAbbreviation();
+			handAbbreviationsPerRank[rank] = new String[tempS.length];
+			handAbbreviationsPerRank[rank][j] = tempS[j];
 		}
-		handAbbreviationsPerRank[rank] = tempS;
-*/
+
 
 	}
 	
@@ -125,7 +129,9 @@ public class HandRankMetadata {
 			throw new IllegalArgumentException();
 		} else {
 			int[] temp = new int[handValuesPerRank[inRank].length];
-			temp = handValuesPerRank[inRank];
+			for (int i = 0; i < temp.length; i++) {
+				temp[i] = handValuesPerRank[inRank][i];
+			}
 			return temp;
 		}
 	}
@@ -135,7 +141,9 @@ public class HandRankMetadata {
 			throw new IllegalArgumentException();
 		} else {
 			String[] temp = new String[handAbbreviationsPerRank[inRank].length];
-			temp = handAbbreviationsPerRank[inRank];
+			for (int i = 0; i < temp.length; i++) {
+				temp[i] = handAbbreviationsPerRank[inRank][i];
+			}
 			return temp;
 		}
 	}
