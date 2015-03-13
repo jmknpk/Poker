@@ -99,6 +99,83 @@ public class Card implements Comparable<Card>, Comparator<Card> {
 		}
 	}
 
+	public static Card getCardFromAbbreviation(String a) {
+		if ( a == null) {
+			throw new NullPointerException();
+		} else if (a.length() == 2) {
+			String a1 = a.substring(0,1);
+			String a2 = a.substring(1,1);
+			PipName p;
+			SuitName s;
+			switch (a1) {
+				case "2" :
+					p = PipName.TWO;
+					break;
+				case "3" :
+					p = PipName.THREE;
+					break;
+				case "4" :
+					p = PipName.FOUR;
+					break;
+				case "5" :
+					p = PipName.FIVE;
+					break;
+				case "6" :
+					p = PipName.SIX;
+					break;
+				case "7" :
+					p = PipName.SEVEN;
+					break;
+				case "8" :
+					p = PipName.EIGHT;
+					break;
+				case "9" :
+					p = PipName.NINE;
+					break;
+				case "T" :
+					p = PipName.TEN;
+					break;
+				case "J" :
+					p = PipName.JACK;
+					break;
+				case "Q" :
+					p = PipName.QUEEN;
+					break;
+				case "K" :
+					p = PipName.KING;
+					break;
+				case "A" :
+					p = PipName.ACE;
+					break;
+				default:
+					p = PipName.UNDEFINED;
+					break;
+			}
+			switch (a2) {
+				case "c":
+					s = SuitName.CLUB;
+					break;
+				case "d":
+					s = SuitName.DIAMOND;
+					break;
+				case "h":
+					s = SuitName.HEART;
+					break;
+				case "s":
+					s = SuitName.SPADE;
+					break;
+				default:
+					s = SuitName.UNDEFINED;
+					break;
+			}
+			
+			return new Card(p,s);
+		} else {
+//System.out.println("dbg getCardFromAbbreviation(): a="+a);
+			throw new IllegalArgumentException();
+		}
+	}
+	
 	public boolean equals(Card inCard) {
 		if (inCard == null) {
 			return false;

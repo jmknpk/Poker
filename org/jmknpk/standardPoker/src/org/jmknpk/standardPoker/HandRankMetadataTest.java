@@ -30,7 +30,10 @@ public class HandRankMetadataTest {
 			assertEquals(HandRankMetadata.numberOfHands,numberOfHands+numberOfHandsBelow+numberOfHandsAbove);
 
 			for (int j = 0; j < data.getNumberOfHands(i); j++) {
-				System.out.println(Integer.toString(handValues[j])+" "+handAbbreviations[j]);
+				Hand hand = Hand.getHandFromAbbreviation(handAbbreviations[j]);
+System.out.println(Integer.toString(i)+" "+Integer.toString(j)+" "+hand.getAbbreviation()+" "+Integer.toString(hand.getHandRank()));
+				assertEquals(i,hand.getHandRank());
+//System.out.println(Integer.toString(handValues[j])+" "+handAbbreviations[j]);
 			}
 			
 		}

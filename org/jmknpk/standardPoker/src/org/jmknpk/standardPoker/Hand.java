@@ -914,6 +914,28 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 				return "problem in Hand.getShowdownDescription() unexpected enum.";
 		}
 	}
+	
+	public static Hand getHandFromAbbreviation(String a) {
+//System.out.println("dbg getHandFromAbbreviation: a="+a);
+		String aSplit;
+		Card[] c = new Card[5];
+		CardSet cs;
+		if (a == null) {
+			throw new NullPointerException();
+		} else {
+			if (a.length() == 10) {
+				for (int i = 0; i < 5; i++) {
+					aSplit = a.substring(i*2,i*2+2);
+//System.out.println("dbg getHandFromAbbreviation: aSplit="+aSplit+" i="+Integer.toString(i));
+					c[i] = Card.getCardFromAbbreviation(aSplit);
+				}
+				cs = new CardSet(c[0],c[1],c[2],c[3],c[4]);
+				return new Hand(cs);
+			} else {
+				throw new IllegalArgumentException();
+			}
+		}
+	}
 
 	
 }
