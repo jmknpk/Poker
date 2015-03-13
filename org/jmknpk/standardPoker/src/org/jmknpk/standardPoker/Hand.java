@@ -115,7 +115,11 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		if (inHand == null) {
 			throw new NullPointerException();
 		} else {
-			return cardSet.equals(inHand.getCardSet());
+			if (handValue == inHand.getValue()) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 	
@@ -133,9 +137,9 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		if (inHand == null) {
 			throw new NullPointerException();
 		} else {
-			if (equals(inHand)) {
+			if (handValue == inHand.getValue()) {
 				return 0;
-			} else if (handRank > inHand.getHandRank()) {
+			} else if (handValue > inHand.getValue()) {
 				return 1;
 			} else {
 				return -1;
