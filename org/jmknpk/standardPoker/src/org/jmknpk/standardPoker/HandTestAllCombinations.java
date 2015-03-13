@@ -1,10 +1,6 @@
 package org.jmknpk.standardPoker;
 
 import static org.junit.Assert.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -38,20 +34,10 @@ public class HandTestAllCombinations {
 		}
 		Arrays.sort(intuitiveHands,Hand.IntuitiveComparator); // Sort by intuitive method
 
-		String outString;
-		BufferedWriter bw = null;
-		try {
-			File file = new File("C:\\Users\\JimPC\\Documents\\Poker\\HandTestAllCombinations.txt");
-			if (!file.exists()) {file.createNewFile();}
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			bw = new BufferedWriter(fw);
-		} catch (IOException e) { };
-		
 		int[] priorD = new int[1];
 		priorD[0] = -1;
 		int priorRank=-1;
 		for (int i = 0; i < intuitiveHands.length; i++) {
-			String temp;
 			int[] d;
 			boolean distinguishersChanged;
 			boolean ranksChanged;
@@ -70,29 +56,10 @@ public class HandTestAllCombinations {
 				ranksChanged = false;
 			} else {
 				ranksChanged = true;
-				if (priorRank+1 != intuitiveHands[i].getHandRank()) {
-					outString = " PROBLEM rank incremented by more than one";
-					try {
-						bw.write(outString,0,outString.length());
-						bw.newLine();
-					} catch (IOException e) {}
-					
-				}
 				assertEquals(priorRank+1,intuitiveHands[i].getHandRank());
 			}
 
 			assertEquals(ranksChanged,distinguishersChanged);
-
-			if (ranksChanged == distinguishersChanged) {
-				temp = "";
-			} else {
-				if (ranksChanged) {
-					temp = "PROBLEM: Rank Changed without Distinguishers Change.";
-				} else {
-					temp = "PROBLEM: Distinguishers changed without Rank change.";
-				}
-			}
-
 			
 			String dString = "";
 			for (int j = 0; j < d.length; j++) {
@@ -101,17 +68,6 @@ public class HandTestAllCombinations {
 				}
 				dString = dString + Integer.toString(d[j]);
 			}
-			outString = "i="+Integer.toString(i)+
-						" rank="+Integer.toString(intuitiveHands[i].getHandRank())+
-						" distinguishers="+	dString +
-						" "+intuitiveHands[i].getAbbreviation()+
-						" "+intuitiveHands[i].getCategoryName()+
-						temp;
-			try {
-				bw.write(outString,0,outString.length());
-				bw.newLine();
-			} catch (IOException e) {}
-
 
 			priorD = d;
 			priorRank = intuitiveHands[i].getHandRank();
@@ -120,34 +76,9 @@ public class HandTestAllCombinations {
 		
 		Arrays.sort(valueHands,Hand.RankThenValueComparator);  // Sort by handValue
 
-		String temp;
 		for (int i = 0; i < valueHands.length; i++) {
-			
 			assertEquals(valueHands[i].getHandRank(),intuitiveHands[i].getHandRank());
-			if (!valueHands[i].equals(intuitiveHands[i])) {
-				temp = "PROBLEM";
-			} else {
-				temp = "";
-			}
-			outString = "i="+Integer.toString(i)+
-					" "+valueHands[i].getAbbreviation()+" rank="+Integer.toString(valueHands[i].getHandRank())+
-					" "+intuitiveHands[i].getAbbreviation()+" rank="+Integer.toString(intuitiveHands[i].getHandRank())+
-					temp;
-			try {
-				bw.write(outString,0,outString.length());
-				bw.newLine();
-			} catch (IOException e) {}
 		}
-		
-
-/*
-		for (int i = 0; i < valueHands.length; i++) {
-			System.out.println(Integer.toString(valueHands[i].getHandRank())+","+Integer.toString(valueHands[i].getValue())+","+valueHands[i].getCardSet().getAbbreviation());
-		}
-*/
-		try {
-			bw.close();
-		} catch (IOException e) {}
 
 	}
 }
