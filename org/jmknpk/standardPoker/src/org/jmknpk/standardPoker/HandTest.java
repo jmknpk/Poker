@@ -10,17 +10,21 @@ public class HandTest {
 
 	@Test
 	public void test() {
-		
+
+		int z = 0;
 		Hand[] hands = new Hand[31];
 		
-		Hand hand1 = new Hand();
-		hands[0] = hand1;
-		assertTrue(hand1 != null);
-		assertEquals(hand1.getCard(0),new Card(PipName.SEVEN,SuitName.CLUB));
-		assertEquals(hand1.getCard(1),new Card(PipName.FIVE,SuitName.CLUB));
-		assertEquals(hand1.getCard(2),new Card(PipName.FOUR,SuitName.CLUB));
-		assertEquals(hand1.getCard(3),new Card(PipName.THREE,SuitName.CLUB));
-		assertEquals(hand1.getCard(4),new Card(PipName.TWO,SuitName.DIAMOND));
+		hands[z] = new Hand();
+		assertTrue(hands[z] != null);
+		assertEquals(hands[z].getCard(0),new Card(PipName.SEVEN,SuitName.CLUB));
+		assertEquals(hands[z].getCard(1),new Card(PipName.FIVE,SuitName.CLUB));
+		assertEquals(hands[z].getCard(2),new Card(PipName.FOUR,SuitName.CLUB));
+		assertEquals(hands[z].getCard(3),new Card(PipName.THREE,SuitName.CLUB));
+		assertEquals(hands[z].getCard(4),new Card(PipName.TWO,SuitName.DIAMOND));
+		assertEquals("Seven high with Five, Four, Three, and Two",hands[z].getShowdownDescription());
+		assertEquals("High Card 75432",hands[z].getShortShowdownDescription());
+		assertEquals("7c5c4c3c2d",hands[z].getAbbreviation());
+		z++;
 		
 		CardSet cardSet = new CardSet(	new Card(PipName.TWO,SuitName.DIAMOND),
 									new Card(PipName.THREE,SuitName.CLUB),
@@ -28,308 +32,379 @@ public class HandTest {
 									new Card(PipName.FIVE,SuitName.CLUB),
 									new Card(PipName.SEVEN,SuitName.CLUB)
 									);
-		Hand hand2 = new Hand(cardSet);
-		hands[1] = hand2;
-		assertTrue(hand2 != null);
-		assertTrue(hand1.equals(hand2));
-		assertEquals(hand1,hand2);
+		hands[z] = new Hand(cardSet);
+		assertTrue(hands[z] != null);
+		assertTrue(hands[z-1].equals(hands[z]));
+		assertEquals(hands[z-1],hands[z]);
+		assertEquals("Seven high with Five, Four, Three, and Two",hands[z].getShowdownDescription());
+		assertEquals("High Card 75432",hands[z].getShortShowdownDescription());
+		assertEquals("7c5c4c3c2d",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand3 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.ACE,SuitName.CLUB),
 											new Card(PipName.TWO,SuitName.CLUB),
 											new Card(PipName.THREE,SuitName.CLUB),
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.FIVE,SuitName.CLUB)));
-		hands[2] = hand3;
-		assertEquals(hand3.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHTFLUSH);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHTFLUSH);
+		assertEquals("Five high straight flush",hands[z].getShowdownDescription());
+		assertEquals("Straight Flush 5",hands[z].getShortShowdownDescription());
+		assertEquals("5c4c3c2cAc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand4 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.CLUB),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[3] = hand4;
-		assertEquals(hand4.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHTFLUSH);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHTFLUSH);
+		assertEquals("Ace high straight flush",hands[z].getShowdownDescription());
+		assertEquals("Straight Flush A",hands[z].getShortShowdownDescription());
+		assertEquals("AcKcQcJcTc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand5 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.DIAMOND),
 											new Card(PipName.TEN,SuitName.HEART),
 											new Card(PipName.TEN,SuitName.SPADE),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[4] = hand5;
-		assertEquals(hand5.getShowdownCategoryName(),ShowdownCategoryName.FOUROFAKIND);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.FOUROFAKIND);
+		assertEquals("Four Tens with an Ace",hands[z].getShowdownDescription());
+		assertEquals("Four of a Kind T w/A",hands[z].getShortShowdownDescription());
+		assertEquals("TsThTdTcAc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand6 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.DIAMOND),
 											new Card(PipName.TEN,SuitName.HEART),
 											new Card(PipName.ACE,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.DIAMOND)));
-		hands[5] = hand6;
-		assertEquals(hand6.getShowdownCategoryName(),ShowdownCategoryName.FULLHOUSE);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.FULLHOUSE);
+		assertEquals("Tens full of Aces",hands[z].getShowdownDescription());
+		assertEquals("Full House TA",hands[z].getShortShowdownDescription());
+		assertEquals("ThTdTcAdAc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand7 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.EIGHT,SuitName.CLUB),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[6] = hand7;
-		assertEquals(hand7.getShowdownCategoryName(),ShowdownCategoryName.FLUSH);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.FLUSH);
+		assertEquals("Ace high flush with King, Queen, Ten, and Eight",hands[z].getShowdownDescription());
+		assertEquals("Flush AKQT8",hands[z].getShortShowdownDescription());
+		assertEquals("AcKcQcTc8c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand8 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.DIAMOND),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[7] = hand8;
-		assertEquals(hand8.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals("Ace high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight A",hands[z].getShortShowdownDescription());
+		assertEquals("AcKcQcJdTc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand9 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.DIAMOND),
 											new Card(PipName.TEN,SuitName.HEART),
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[8] = hand9;
-		assertEquals(hand9.getShowdownCategoryName(),ShowdownCategoryName.THREEOFAKIND);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.THREEOFAKIND);
+		assertEquals("Three Tens with an Ace and King",hands[z].getShowdownDescription());
+		assertEquals("Three of a Kind T w/AK",hands[z].getShortShowdownDescription());
+		assertEquals("ThTdTcAcKc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand10 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.DIAMOND),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.QUEEN,SuitName.DIAMOND),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[9] = hand10;
-		assertEquals(hand10.getShowdownCategoryName(),ShowdownCategoryName.TWOPAIR);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.TWOPAIR);
+		assertEquals("Queens over Tens with an Ace",hands[z].getShowdownDescription());
+		assertEquals("Two Pair QT w/A",hands[z].getShortShowdownDescription());
+		assertEquals("QdQcTdTcAc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand11 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.DIAMOND),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[10] = hand11;
-		assertEquals(hand11.getShowdownCategoryName(),ShowdownCategoryName.ONEPAIR);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.ONEPAIR);
+		assertEquals("Pair of Tens with Ace, King, and Queen",hands[z].getShowdownDescription());
+		assertEquals("One Pair T w/AKQ",hands[z].getShortShowdownDescription());
+		assertEquals("TdTcAcKcQc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand12 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.SIX,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.DIAMOND),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.CLUB)));
-		hands[11] = hand12;
-		assertEquals(hand12.getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals("Ace high with King, Queen, Jack, and Six",hands[z].getShowdownDescription());
+		assertEquals("High Card AKQJ6",hands[z].getShortShowdownDescription());
+		assertEquals("AcKcQcJd6c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand13 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.ACE,SuitName.CLUB),
 											new Card(PipName.TWO,SuitName.CLUB),
 											new Card(PipName.THREE,SuitName.CLUB),
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.FIVE,SuitName.DIAMOND)));
-		hands[12] = hand13;
-		assertEquals(hand13.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(792,hand13.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand13.calculatePipCombinationsRank())+" "+hand13.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(12,hands[z].calculatePipCombinationsRank());
+		assertEquals("Five high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight 5",hands[z].getShortShowdownDescription());
+		assertEquals("5d4c3c2cAc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand14 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TWO,SuitName.CLUB),
 											new Card(PipName.THREE,SuitName.CLUB),
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.FIVE,SuitName.CLUB),
 											new Card(PipName.SIX,SuitName.DIAMOND)));
-		hands[13] = hand14;
-		assertEquals(hand14.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(0,hand14.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand14.calculatePipCombinationsRank())+" "+hand14.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(0,hands[z].calculatePipCombinationsRank());
+		assertEquals("Six high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight 6",hands[z].getShortShowdownDescription());
+		assertEquals("6d5c4c3c2c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand15 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.THREE,SuitName.CLUB),
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.FIVE,SuitName.CLUB),
 											new Card(PipName.SIX,SuitName.CLUB),
 											new Card(PipName.SEVEN,SuitName.DIAMOND)));
-		hands[14] = hand15;
-		assertEquals(hand15.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(5,hand15.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand15.calculatePipCombinationsRank())+" "+hand15.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(5,hands[z].calculatePipCombinationsRank());
+		assertEquals("Seven high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight 7",hands[z].getShortShowdownDescription());
+		assertEquals("7d6c5c4c3c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand16 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.FIVE,SuitName.CLUB),
 											new Card(PipName.SIX,SuitName.CLUB),
 											new Card(PipName.SEVEN,SuitName.CLUB),
 											new Card(PipName.EIGHT,SuitName.DIAMOND)));
-		hands[15] = hand16;
-		assertEquals(hand16.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(20,hand16.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand16.calculatePipCombinationsRank())+" "+hand16.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(20,hands[z].calculatePipCombinationsRank());
+		assertEquals("Eight high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight 8",hands[z].getShortShowdownDescription());
+		assertEquals("8d7c6c5c4c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand17 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.FIVE,SuitName.CLUB),
 											new Card(PipName.SIX,SuitName.CLUB),
 											new Card(PipName.SEVEN,SuitName.CLUB),
 											new Card(PipName.EIGHT,SuitName.CLUB),
 											new Card(PipName.NINE,SuitName.DIAMOND)));
-		hands[16] = hand17;
-		assertEquals(hand17.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(55,hand17.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand17.calculatePipCombinationsRank())+" "+hand17.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(55,hands[z].calculatePipCombinationsRank());
+		assertEquals("Nine high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight 9",hands[z].getShortShowdownDescription());
+		assertEquals("9d8c7c6c5c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand18 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.SIX,SuitName.CLUB),
 											new Card(PipName.SEVEN,SuitName.CLUB),
 											new Card(PipName.EIGHT,SuitName.CLUB),
 											new Card(PipName.NINE,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.DIAMOND)));
-		hands[17] = hand18;
-		assertEquals(hand18.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(125,hand18.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand18.calculatePipCombinationsRank())+" "+hand18.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(125,hands[z].calculatePipCombinationsRank());
+		assertEquals("Ten high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight T",hands[z].getShortShowdownDescription());
+		assertEquals("Td9c8c7c6c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand19 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.SEVEN,SuitName.CLUB),
 											new Card(PipName.EIGHT,SuitName.CLUB),
 											new Card(PipName.NINE,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.DIAMOND)));
-		hands[18] = hand19;
-		assertEquals(hand19.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(251,hand19.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand19.calculatePipCombinationsRank())+" "+hand19.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(251,hands[z].calculatePipCombinationsRank());
+		assertEquals("Jack high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight J",hands[z].getShortShowdownDescription());
+		assertEquals("JdTc9c8c7c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand20 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.EIGHT,SuitName.CLUB),
 											new Card(PipName.NINE,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.CLUB),
 											new Card(PipName.QUEEN,SuitName.DIAMOND)));
-		hands[19] = hand20;
-		assertEquals(hand20.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(461,hand20.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand20.calculatePipCombinationsRank())+" "+hand20.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(461,hands[z].calculatePipCombinationsRank());
+		assertEquals("Queen high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight Q",hands[z].getShortShowdownDescription());
+		assertEquals("QdJcTc9c8c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand21 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.NINE,SuitName.CLUB),
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.CLUB),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.KING,SuitName.DIAMOND)));
-		hands[20] = hand21;
-		assertEquals(hand21.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(791,hand21.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand21.calculatePipCombinationsRank())+" "+hand21.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(791,hands[z].calculatePipCombinationsRank());
+		assertEquals("King high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight K",hands[z].getShortShowdownDescription());
+		assertEquals("KdQcJcTc9c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand22 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.TEN,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.CLUB),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.ACE,SuitName.DIAMOND)));
-		hands[21] = hand22;
-		assertEquals(hand22.getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
-		assertEquals(1286,hand22.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand22.calculatePipCombinationsRank())+" "+hand22.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.STRAIGHT);
+		assertEquals(1286,hands[z].calculatePipCombinationsRank());
+		assertEquals("Ace high straight",hands[z].getShowdownDescription());
+		assertEquals("Straight A",hands[z].getShortShowdownDescription());
+		assertEquals("AdKcQcJcTc",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand23 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.KING,SuitName.SPADE),
 											new Card(PipName.QUEEN,SuitName.SPADE),
 											new Card(PipName.JACK,SuitName.SPADE),
 											new Card(PipName.NINE,SuitName.SPADE),
 											new Card(PipName.SEVEN,SuitName.HEART)));
-		hands[22] = hand23;
-		assertEquals(hand23.getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
-		assertEquals(782,hand23.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand23.calculatePipCombinationsRank())+" "+hand23.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals(782,hands[z].calculatePipCombinationsRank());
+		assertEquals("King high with Queen, Jack, Nine, and Seven",hands[z].getShowdownDescription());
+		assertEquals("High Card KQJ97",hands[z].getShortShowdownDescription());
+		assertEquals("KsQsJs9s7h",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand24 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.KING,SuitName.CLUB),
 											new Card(PipName.QUEEN,SuitName.CLUB),
 											new Card(PipName.JACK,SuitName.CLUB),
 											new Card(PipName.NINE,SuitName.CLUB),
 											new Card(PipName.EIGHT,SuitName.DIAMOND)));
-		hands[23] = hand24;
-		assertEquals(hand24.getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
-		assertEquals(783,hand24.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand24.calculatePipCombinationsRank())+" "+hand24.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals(783,hands[z].calculatePipCombinationsRank());
+		assertEquals("King high with Queen, Jack, Nine, and Eight",hands[z].getShowdownDescription());
+		assertEquals("High Card KQJ98",hands[z].getShortShowdownDescription());
+		assertEquals("KcQcJc9c8d",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand25 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.KING,SuitName.SPADE),
 											new Card(PipName.QUEEN,SuitName.SPADE),
 											new Card(PipName.JACK,SuitName.SPADE),
 											new Card(PipName.TEN,SuitName.SPADE),
 											new Card(PipName.EIGHT,SuitName.HEART)));
-		hands[24] = hand25;
-		assertEquals(hand25.getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
-		assertEquals(790,hand25.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand25.calculatePipCombinationsRank())+" "+Integer.toString(hand25.calculateNonStraightPipCombinationsRank())+" "+hand25.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals(790,hands[z].calculatePipCombinationsRank());
+		assertEquals("King high with Queen, Jack, Ten, and Eight",hands[z].getShowdownDescription());
+		assertEquals("High Card KQJT8",hands[z].getShortShowdownDescription());
+		assertEquals("KsQsJsTs8h",hands[z].getAbbreviation());
+		z++;
 		
-		Hand hand26 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.ACE,SuitName.CLUB),
 											new Card(PipName.SIX,SuitName.CLUB),
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.THREE,SuitName.CLUB),
 											new Card(PipName.TWO,SuitName.DIAMOND)));
-		hands[25] = hand26;
-		assertEquals(hand26.getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
-		assertEquals(793,hand26.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand26.calculatePipCombinationsRank())+" "+Integer.toString(hand26.calculateNonStraightPipCombinationsRank())+" "+hand26.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals(793,hands[z].calculatePipCombinationsRank());
+		assertEquals("Ace high with Six, Four, Three, and Two",hands[z].getShowdownDescription());
+		assertEquals("High Card A6432",hands[z].getShortShowdownDescription());
+		assertEquals("Ac6c4c3c2d",hands[z].getAbbreviation());
+		z++;
 		
-		Hand hand27 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.ACE,SuitName.SPADE),
 											new Card(PipName.KING,SuitName.SPADE),
 											new Card(PipName.QUEEN,SuitName.SPADE),
 											new Card(PipName.JACK,SuitName.SPADE),
 											new Card(PipName.NINE,SuitName.HEART)));
-		hands[26] = hand27;
-		assertEquals(hand27.getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
-		assertEquals(1285,hand27.calculatePipCombinationsRank());
-//System.out.println(Integer.toString(hand27.calculatePipCombinationsRank())+" "+Integer.toString(hand27.calculateNonStraightPipCombinationsRank())+" "+hand27.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.HIGHCARD);
+		assertEquals(1285,hands[z].calculatePipCombinationsRank());
+		assertEquals("Ace high with King, Queen, Jack, and Nine",hands[z].getShowdownDescription());
+		assertEquals("High Card AKQJ9",hands[z].getShortShowdownDescription());
+		assertEquals("AsKsQsJs9h",hands[z].getAbbreviation());
+		z++;
 		
-		Hand hand28 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.SIX,SuitName.SPADE),
 											new Card(PipName.FIVE,SuitName.SPADE),
 											new Card(PipName.FOUR,SuitName.SPADE),
 											new Card(PipName.FOUR,SuitName.HEART),
 											new Card(PipName.THREE,SuitName.SPADE)));
 
-		hands[27] = hand28;
-		assertEquals(hand28.getShowdownCategoryName(),ShowdownCategoryName.ONEPAIR);
-//		System.out.println(Integer.toString(hand28.calculateOnePairKickerRank())+" "+Integer.toString(hand28.calculateOnePairRank())+" "+hand28.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.ONEPAIR);
+		assertEquals("Pair of Fours with Six, Five, and Three",hands[z].getShowdownDescription());
+		assertEquals("One Pair 4 w/653",hands[z].getShortShowdownDescription());
+		assertEquals("4s4h6s5s3s",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand29 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.SEVEN,SuitName.CLUB),
 											new Card(PipName.FOUR,SuitName.DIAMOND),
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.THREE,SuitName.CLUB),
 											new Card(PipName.TWO,SuitName.CLUB)));
-		hands[28] = hand29;
-		assertEquals(hand29.getShowdownCategoryName(),ShowdownCategoryName.ONEPAIR);
-//		System.out.println(Integer.toString(hand29.calculateOnePairKickerRank())+" "+Integer.toString(hand29.calculateOnePairRank())+" "+hand29.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.ONEPAIR);
+		assertEquals("Pair of Fours with Seven, Three, and Two",hands[z].getShowdownDescription());
+		assertEquals("One Pair 4 w/732",hands[z].getShortShowdownDescription());
+		assertEquals("4d4c7c3c2c",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand30 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.ACE,SuitName.SPADE),
 											new Card(PipName.ACE,SuitName.HEART),
 											new Card(PipName.TWO,SuitName.SPADE),
 											new Card(PipName.TWO,SuitName.HEART),
 											new Card(PipName.TWO,SuitName.DIAMOND)));
 
-		hands[29] = hand30;
-		assertEquals(hand30.getShowdownCategoryName(),ShowdownCategoryName.FULLHOUSE);
-//		System.out.println(Integer.toString(hand30.calculateOnePairKickerRank())+" "+Integer.toString(hand30.calculateOnePairRank())+" "+hand30.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.FULLHOUSE);
+		assertEquals("Twos full of Aces",hands[z].getShowdownDescription());
+		assertEquals("Full House 2A",hands[z].getShortShowdownDescription());
+		assertEquals("2s2h2dAsAh",hands[z].getAbbreviation());
+		z++;
 
-		Hand hand31 = new Hand( new CardSet(
+		hands[z] = new Hand( new CardSet(
 											new Card(PipName.FOUR,SuitName.DIAMOND),
 											new Card(PipName.FOUR,SuitName.CLUB),
 											new Card(PipName.THREE,SuitName.HEART),
 											new Card(PipName.THREE,SuitName.DIAMOND),
 											new Card(PipName.THREE,SuitName.CLUB)));
-		hands[30] = hand31;
-		assertEquals(hand31.getShowdownCategoryName(),ShowdownCategoryName.FULLHOUSE);
-//		System.out.println(Integer.toString(hand31.calculateOnePairKickerRank())+" "+Integer.toString(hand31.calculateOnePairRank())+" "+hand31.getAbbreviation());
+		assertEquals(hands[z].getShowdownCategoryName(),ShowdownCategoryName.FULLHOUSE);
+		assertEquals("Threes full of Fours",hands[z].getShowdownDescription());
+		assertEquals("Full House 34",hands[z].getShortShowdownDescription());
+		assertEquals("3h3d3c4d4c",hands[z].getAbbreviation());
+		z++;
 
 
 

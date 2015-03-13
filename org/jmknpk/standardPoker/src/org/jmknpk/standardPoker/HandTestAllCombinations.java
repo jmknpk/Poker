@@ -1,7 +1,6 @@
 package org.jmknpk.standardPoker;
 
 import static org.junit.Assert.*;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

@@ -106,6 +106,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 			}
 			
 			evaluate();
+			showdownCardSort();
 			
 		}
 	}
@@ -643,6 +644,131 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		return	maxFourOfAKindRank + 1 + // start at the rank just higher than the lower showdown category
 				distinguishers[1] - 3; // rank within set of straights is based on high card, starting with 5
 	}
+
+	public void showdownCardSort() {
+		Card[] reorder = new Card[5];
+		int j;
+		int k;
+		switch (categoryName) {
+		case STRAIGHTFLUSH:
+			if (cards[0].getPipValue() == 12 && cards[4].getPipValue() == 0) {
+// Ace High Straight needs reordering
+				reorder[0] = cards[0];
+				cards[0] = cards[1];
+				cards[1] = cards[2];
+				cards[2] = cards[3];
+				cards[3] = cards[4];
+				cards[4] = reorder[0];
+			}
+			cardSet = new CardSet(cards);
+			break;
+		case FOUROFAKIND:
+			j = 0;
+			for (int i = 0; i < cards.length; i++) {
+				if (cards[i].getPipValue() == distinguishers[1]) {
+					reorder[j++] = cards[i];
+				} else {
+					reorder[4] = cards[i];
+				}
+			}
+			cards[0] = reorder[0];
+			cards[1] = reorder[1];
+			cards[2] = reorder[2];
+			cards[3] = reorder[3];
+			cards[4] = reorder[4];
+			cardSet = new CardSet(cards);
+			break;
+		case FULLHOUSE:
+			j = 0;
+			k = 3;
+			for (int i = 0; i < cards.length; i++) {
+				if (cards[i].getPipValue() == distinguishers[1]) {
+					reorder[j++] = cards[i];
+				} else {
+					reorder[k++] = cards[i];
+				}
+			}
+			cards[0] = reorder[0];
+			cards[1] = reorder[1];
+			cards[2] = reorder[2];
+			cards[3] = reorder[3];
+			cards[4] = reorder[4];
+			cardSet = new CardSet(cards);
+			break;
+		case FLUSH:
+			break;
+		case STRAIGHT:
+			if (cards[0].getPipValue() == 12 && cards[4].getPipValue() == 0) {
+// Ace High Straight needs reordering
+				reorder[0] = cards[0];
+				cards[0] = cards[1];
+				cards[1] = cards[2];
+				cards[2] = cards[3];
+				cards[3] = cards[4];
+				cards[4] = reorder[0];
+				cardSet = new CardSet(cards);
+			}
+			break;
+		case THREEOFAKIND:
+			j = 0;
+			k = 3;
+			for (int i = 0; i < cards.length; i++) {
+				if (cards[i].getPipValue() == distinguishers[1]) {
+					reorder[j++] = cards[i];
+				} else {
+					reorder[k++] = cards[i];
+				}
+			}
+			cards[0] = reorder[0];
+			cards[1] = reorder[1];
+			cards[2] = reorder[2];
+			cards[3] = reorder[3];
+			cards[4] = reorder[4];
+			cardSet = new CardSet(cards);
+			break;
+		case TWOPAIR:
+			j = 0;
+			k = 2;
+			for (int i = 0; i < cards.length; i++) {
+				if (cards[i].getPipValue() == distinguishers[1]) {
+					reorder[j++] = cards[i];
+				} else if (cards[i].getPipValue() == distinguishers[2]) {
+					reorder[k++] = cards[i];
+				} else {
+					reorder[4] = cards[i];
+				}
+			}
+			cards[0] = reorder[0];
+			cards[1] = reorder[1];
+			cards[2] = reorder[2];
+			cards[3] = reorder[3];
+			cards[4] = reorder[4];
+			cardSet = new CardSet(cards);
+			break;
+		case ONEPAIR:
+			j = 0;
+			k = 2;
+			for (int i = 0; i < cards.length; i++) {
+				if (cards[i].getPipValue() == distinguishers[1]) {
+					reorder[j++] = cards[i];
+				} else {
+					reorder[k++] = cards[i];
+				}
+			}
+			cards[0] = reorder[0];
+			cards[1] = reorder[1];
+			cards[2] = reorder[2];
+			cards[3] = reorder[3];
+			cards[4] = reorder[4];
+			cardSet = new CardSet(cards);
+			break;
+		case HIGHCARD:
+			break;
+		default:
+			break;
+		}
+	}
+	
 	
 	public ShowdownCategoryName getShowdownCategoryName() {
 		return categoryName;
@@ -701,11 +827,93 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		return temp;
 	}
 
-/* 	public static Comparator HandRankComparator = new Comparator<Hand>() {
-		public int compare() {
-			return 0;
-		}	    	 
+	public String getShowdownDescription() {
+		String aText;
+		switch(categoryName) {
+			case STRAIGHTFLUSH:
+				return (new Pip(distinguishers[1])).getName()+" high straight flush";
+			case FOUROFAKIND:
+				if (distinguishers[2] == 12 || distinguishers[2] == 6) {
+					aText = "an";  // an Ace or an Eight 
+				} else {
+					aText = "a"; // a two, a three, a four, a five, a six, a seven, a nine, a ten, a jack, a queen, a king
+				}
+				return "Four "+(new Pip(distinguishers[1])).getName()+"s with "+aText+" "+(new Pip(distinguishers[2])).getName();
+			case FULLHOUSE:
+				return (new Pip(distinguishers[1])).getName()+"s full of "+(new Pip(distinguishers[2])).getName()+"s";
+			case FLUSH:
+				return (new Pip(distinguishers[1]).getName()+" high flush with "+
+						(new Pip(distinguishers[2])).getName()+", "+
+						(new Pip(distinguishers[3])).getName()+", "+
+						(new Pip(distinguishers[4])).getName()+", and "+
+						(new Pip(distinguishers[5])).getName());
+			case STRAIGHT:
+				return (new Pip(distinguishers[1])).getName()+" high straight";
+			case THREEOFAKIND:
+				if (distinguishers[2] == 12 || distinguishers[2] == 6) {
+					aText = "an";  // an Ace or an Eight 
+				} else {
+					aText = "a"; // a two, a three, a four, a five, a six, a seven, a nine, a ten, a jack, a queen, a king
+				}
+				return "Three "+(new Pip(distinguishers[1])).getName()+"s with "+aText+" "+(new Pip(distinguishers[2])).getName()+" and "+(new Pip(distinguishers[3])).getName();
+			case TWOPAIR:
+				if (distinguishers[3] == 12 || distinguishers[3] == 6) {
+					aText = "an";  // an Ace or an Eight 
+				} else {
+					aText = "a"; // a two, a three, a four, a five, a six, a seven, a nine, a ten, a jack, a queen, a king
+				}
+				return (new Pip(distinguishers[1])).getName()+"s over "+(new Pip(distinguishers[2])).getName()+"s with "+aText+" "+(new Pip(distinguishers[3])).getName();
+			case ONEPAIR:
+				return "Pair of "+(new Pip(distinguishers[1])).getName()+"s with "+
+					(new Pip(distinguishers[2])).getName()+", "+
+					(new Pip(distinguishers[3])).getName()+", and "+
+					(new Pip(distinguishers[4])).getName();
+			case HIGHCARD:
+				return (new Pip(distinguishers[1])).getName()+" high with "+
+				(new Pip(distinguishers[2])).getName()+", "+
+				(new Pip(distinguishers[3])).getName()+", "+
+				(new Pip(distinguishers[4])).getName()+", and "+
+				(new Pip(distinguishers[5])).getName();
+			default:
+				return "problem in Hand.getShowdownDescription() unexpected enum.";
+		}
 	}
-*/
+
+	public String getShortShowdownDescription() {
+		switch(categoryName) {
+			case STRAIGHTFLUSH:
+				return "Straight Flush "+(new Pip(distinguishers[1])).getInitial();
+			case FOUROFAKIND:
+				return "Four of a Kind "+(new Pip(distinguishers[1])).getInitial()+" w/"+(new Pip(distinguishers[2])).getInitial();
+			case FULLHOUSE:
+				return "Full House "+(new Pip(distinguishers[1])).getInitial()+(new Pip(distinguishers[2])).getInitial();
+			case FLUSH:
+				return "Flush "+(new Pip(distinguishers[1]).getInitial()+
+						(new Pip(distinguishers[2])).getInitial()+
+						(new Pip(distinguishers[3])).getInitial()+
+						(new Pip(distinguishers[4])).getInitial()+
+						(new Pip(distinguishers[5])).getInitial());
+			case STRAIGHT:
+				return "Straight "+(new Pip(distinguishers[1])).getInitial();
+			case THREEOFAKIND:
+				return "Three of a Kind "+(new Pip(distinguishers[1])).getInitial()+" w/"+(new Pip(distinguishers[2])).getInitial()+(new Pip(distinguishers[3])).getInitial();
+			case TWOPAIR:
+				return "Two Pair "+(new Pip(distinguishers[1])).getInitial()+(new Pip(distinguishers[2])).getInitial()+" w/"+(new Pip(distinguishers[3])).getInitial();
+			case ONEPAIR:
+				return "One Pair "+(new Pip(distinguishers[1])).getInitial()+" w/"+
+					(new Pip(distinguishers[2])).getInitial()+
+					(new Pip(distinguishers[3])).getInitial()+
+					(new Pip(distinguishers[4])).getInitial();
+			case HIGHCARD:
+				return "High Card "+(new Pip(distinguishers[1])).getInitial()+
+				(new Pip(distinguishers[2])).getInitial()+
+				(new Pip(distinguishers[3])).getInitial()+
+				(new Pip(distinguishers[4])).getInitial()+
+				(new Pip(distinguishers[5])).getInitial();
+			default:
+				return "problem in Hand.getShowdownDescription() unexpected enum.";
+		}
+	}
+
 	
 }
