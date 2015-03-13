@@ -31,7 +31,7 @@ public class ShowAllHandCombinations {
 		String outString;
 		BufferedWriter bw = null;
 		try {
-			File file = new File("C:\\Users\\JimPC\\Documents\\Poker\\HandTestAllCombinations.txt");
+			File file = new File("C:\\Users\\JimPC\\Documents\\Poker\\ShowAllHandCombinations.txt");
 			if (!file.exists()) {file.createNewFile();}
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			bw = new BufferedWriter(fw);

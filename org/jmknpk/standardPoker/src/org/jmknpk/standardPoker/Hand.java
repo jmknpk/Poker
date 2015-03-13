@@ -14,7 +14,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	private int handValue; // handValue ranges from 0 to 2,598,959 for 2,598,960 different hands.  
 // handValue is unique for all Non-ordered combinations of a set of 52 distinct cards.  
 // AcAdAh2c2d has a different handValue from AcAdAh2c2s.  But 2dAcAdAh2c has the same handValue as AcAdAh2c2d (i.e. order is ignored).
-	private int handRank;  // handRank of hands ranges from 0 to 7461. 
+	private int handRank;  // handRank of hands ranges from 0 to 7461, for 7462 unique showdown hand ranks. 
 // handRank is the relative rank of showdown hands.  AcAdAh2c2d has the same handRank as AcAdAs2c2d, because it is equivalent at showdwon.
 
 	public static final Comparator<Hand> RankComparator = new Comparator<Hand>() {

@@ -21,8 +21,8 @@ public class HandRankMetadataTest {
 			recount = recount + numberOfHands;
 			numberOfHandsBelow = data.getNumberOfHandsBelow(i);
 			numberOfHandsAbove = data.getNumberOfHandsAbove(i);
-			handValues = new int[data.getNumberOfHands(i)];
-			handValues = data.getHandValues(i);
+//			handValues = new int[data.getNumberOfHands(i)];
+//			handValues = data.getHandValues(i);
 			assertEquals(HandRankMetadata.numberOfHands,numberOfHands+numberOfHandsBelow+numberOfHandsAbove);
 		}
 		assertEquals(HandRankMetadata.numberOfHands,recount);
