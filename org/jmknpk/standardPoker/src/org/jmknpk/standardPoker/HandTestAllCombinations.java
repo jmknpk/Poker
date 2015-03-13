@@ -30,7 +30,7 @@ public class HandTestAllCombinations {
 				}
 			}
 		}
-		assertEquals(12048,maxRank);
+		assertEquals(7461,maxRank);
 		assertEquals(2598960,handIndex);
 
 		Hand[] intuitiveHands = new Hand[2598960];
@@ -42,7 +42,7 @@ public class HandTestAllCombinations {
 		String outString;
 		BufferedWriter bw = null;
 		try {
-			File file = new File("HandTestAllCombinations.txt");
+			File file = new File("C:\\Users\\JimPC\\Documents\\Poker\\HandTestAllCombinations.txt");
 			if (!file.exists()) {file.createNewFile();}
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			bw = new BufferedWriter(fw);
@@ -71,8 +71,19 @@ public class HandTestAllCombinations {
 				ranksChanged = false;
 			} else {
 				ranksChanged = true;
+				if (priorRank+1 != intuitiveHands[i].getHandRank()) {
+					outString = " PROBLEM rank incremented by more than one";
+					try {
+						bw.write(outString,0,outString.length());
+						bw.newLine();
+					} catch (IOException e) {}
+					
+				}
+				assertEquals(priorRank+1,intuitiveHands[i].getHandRank());
 			}
+
 			assertEquals(ranksChanged,distinguishersChanged);
+
 			if (ranksChanged == distinguishersChanged) {
 				temp = "";
 			} else {
@@ -83,7 +94,7 @@ public class HandTestAllCombinations {
 				}
 			}
 
-/*			
+			
 			String dString = "";
 			for (int j = 0; j < d.length; j++) {
 				if (j > 0) {
@@ -101,7 +112,7 @@ public class HandTestAllCombinations {
 				bw.write(outString,0,outString.length());
 				bw.newLine();
 			} catch (IOException e) {}
-*/
+
 
 			priorD = d;
 			priorRank = intuitiveHands[i].getHandRank();
@@ -109,13 +120,20 @@ public class HandTestAllCombinations {
 
 		
 		Arrays.sort(valueHands,Hand.RankThenValueComparator);  // Sort by handValue
-		
+
+		String temp;
 		for (int i = 0; i < valueHands.length; i++) {
 			
-//			assertEquals(valueHands[i].getHandRank(),intuitiveHands[i].getHandRank());
+			assertEquals(valueHands[i].getHandRank(),intuitiveHands[i].getHandRank());
+			if (!valueHands[i].equals(intuitiveHands[i])) {
+				temp = "PROBLEM";
+			} else {
+				temp = "";
+			}
 			outString = "i="+Integer.toString(i)+
-					" "+valueHands[i].getAbbreviation()+
-					" "+intuitiveHands[i].getAbbreviation();
+					" "+valueHands[i].getAbbreviation()+" rank="+Integer.toString(valueHands[i].getHandRank())+
+					" "+intuitiveHands[i].getAbbreviation()+" rank="+Integer.toString(intuitiveHands[i].getHandRank())+
+					temp;
 			try {
 				bw.write(outString,0,outString.length());
 				bw.newLine();

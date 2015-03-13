@@ -14,7 +14,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	private int handValue; // handValue ranges from 0 to 2,598,959 for 2,598,960 different hands.  
 // handValue is unique for all Non-ordered combinations of a set of 52 distinct cards.  
 // AcAdAh2c2d has a different handValue from AcAdAh2c2s.  But 2dAcAdAh2c has the same handValue as AcAdAh2c2d (i.e. order is ignored).
-	private int handRank;  // handRank of hands ranges from 0 to 7461.  
+	private int handRank;  // handRank of hands ranges from 0 to 7461. 
 // handRank is the relative rank of showdown hands.  AcAdAh2c2d has the same handRank as AcAdAs2c2d, because it is equivalent at showdwon.
 
 	public static final Comparator<Hand> RankComparator = new Comparator<Hand>() {
@@ -62,18 +62,20 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 				d2 = h2.getDistinguishers();
 				int comparison = 0;
 				for (int i = 0; i < d1.length && i < d2.length && comparison == 0; i++) {
-					if (d1[i] > d2[i]) {
-						comparison = 1;
-					} else if (d1[i] < d2[i]) {
-						comparison = -1;
+					if (i < d1.length && i < d2.length) {
+						if (d1[i] > d2[i]) {
+							comparison = 1;
+						} else if (d1[i] < d2[i]) {
+							comparison = -1;
+						}
 					}
+				}
 				if (comparison == 0) {
 					if (h1.getValue() >h2.getValue()) {
 						comparison = 1;
 					} else if (h1.getValue() < h2.getValue()) {
 						comparison = -1;
 					}
-				}
 				}
 				return comparison;
 			}
@@ -254,23 +256,25 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 			for (int i = 0; i < 13; i++) {
 				matches[i] = -1;
 			}
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < 5; i++) {
 //System.out.println("dgb Hand.evaluation() i="+Integer.toString(i));
 				if (matches[cards[i].getPipValue()] == -1) {
 					matches[cards[i].getPipValue()] = 0;  // indicates that the card was found within the hand regardless of matching
 				}
-				if ( cards[i].getPip().equals(cards[i+1].getPip())) {
+				if (i < 4) {
+					if ( cards[i].getPip().equals(cards[i+1].getPip())) {
 //System.out.println("dbg Hand.evaluation() found match a "+cards[i].getAbbreviation()+" "+cards[i].getAbbreviation());
 //System.out.println("dbg Hand.evaluation() found match b cards["+Integer.toString(i)+"].getPipValue()="+Integer.toString(cards[i].getPipValue()));
 //System.out.println("dbg Hand.evaluation() found match c matches["+Integer.toString(cards[i].getPipValue())+"]="+Integer.toString(matches[cards[i].getPipValue()]));
 //System.out.println("dbg Hand.evaluation() found match d matches["+Integer.toString(cards[i].getPipValue())+"]="+Integer.toString(matches[cards[i].getPipValue()]));
-					if (matches[cards[i].getPipValue()] == 0) {
-						matchCount++;  // This is a new set of matching pips
-					}
-					matches[cards[i].getPipValue()]++; // count the number of matching pips
-					if (matches[cards[i].getPipValue()] > matchMax) {
-						matchMax++; // keep track of the maximum number of matching pips for all pips
-						matchMaxPip = cards[i].getPipValue(); // keep track of the pip going with the maximum value
+						if (matches[cards[i].getPipValue()] == 0) {
+							matchCount++;  // This is a new set of matching pips
+						}
+						matches[cards[i].getPipValue()]++; // count the number of matching pips
+						if (matches[cards[i].getPipValue()] > matchMax) {
+							matchMax++; // keep track of the maximum number of matching pips for all pips
+							matchMaxPip = cards[i].getPipValue(); // keep track of the pip going with the maximum value
+						}
 					}
 				}
 			}
@@ -304,11 +308,14 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 					distinguishers[1] = matchMaxPip; // Can only have two matches for one of the pips.  This must be it.
 					keepSearching = true;
 					for (int i = 0; i < 5 && keepSearching; i++) {
+//System.out.println("Hand.evauate() fullhouse: i="+Integer.toString(i)+" cards[i].getPipValue()="+Integer.toString(cards[i].getPipValue())+" distinguishers[1]="+Integer.toString(distinguishers[1]));
 						if (cards[i].getPipValue() != distinguishers[1]) {
-							distinguishers[2] = i;
+							distinguishers[2] = cards[i].getPipValue();
 							keepSearching = false;
+//System.out.println("Hand.evaluate() fullhouse: set distinguishers[2]="+Integer.toString(distinguishers[2]));
 						}
 					}
+//System.out.println("Hand.evalute() fullhouse: distinguishers[1]="+Integer.toString(distinguishers[1])+" distinguishers[2]="+Integer.toString(distinguishers[2]));
 				} else {
 
 //***method evaluate** Main decision Tree > Pip Matching Hands > Three of a Kind
@@ -365,10 +372,26 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 					distinguishers[0] = getShowdownCategoryValue(ShowdownCategoryName.ONEPAIR);
 					numberFound = 0;
 					int secondaryIndex = 2;
-					for (int i = 12; i >= 0 && numberFound < 4; i--) {
+/*
+					System.out.println("Hand.evaluate() matches="+	Integer.toString(matches[0])+" "+
+												Integer.toString(matches[1])+" "+
+												Integer.toString(matches[2])+" "+
+												Integer.toString(matches[3])+" "+
+												Integer.toString(matches[4])+" "+
+												Integer.toString(matches[5])+" "+
+												Integer.toString(matches[6])+" "+
+												Integer.toString(matches[7])+" "+
+												Integer.toString(matches[8])+" "+
+												Integer.toString(matches[9])+" "+
+												Integer.toString(matches[10])+" "+
+												Integer.toString(matches[11])+" "+
+												Integer.toString(matches[12]));
+*/
+					for (int i = 12; i >= 0 && numberFound < 5; i--) {
+//System.out.println("Hand.evalute() i="+Integer.toString(i)+" secondaryIndex="+Integer.toString(secondaryIndex));
 						if (matches[i] > 0) {
 							distinguishers[1] = i;
-//System.out.println("Hand.evaluate() One Pair distinguishers["+Integer.toString(1)+"]= "+Integer.toString(i));
+//System.out.println("Hand.evaluate() One Pair distinguishers["+Integer.toString(1)+"]= "+Integer.toString(i)+" Greater");
 							numberFound++;
 						} else if (matches[i] == 0) {
 							distinguishers[secondaryIndex++] = i;
@@ -478,6 +501,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		int temp = calculatePipCombinationsRank();
 // Decrement straight-included rank for each straight combination included in that rank
 		if (temp >= 1286) temp--; // TJQKA
+		if (temp >= 792) temp--; // A2345 is odd because Ace= pip 1 for relative purposes.
 		if (temp >= 791) temp--; // 9TJQK
 		if (temp >= 461) temp--; // 89TJQ
 		if (temp >=251) temp--; // 789TJ
@@ -486,15 +510,33 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		if (temp >=20) temp--; // 45678
 		if (temp >=5) temp--; // 34567
 		if (temp >= 0) temp--; // 23456
-		// no decrement necessary for A2345 because it is already rank 0.
 		
 		return temp;
 
 	}
+
+
+/*
+	public int calculateOnePairKickerRank() {
+		int[] vals = new int[3];
+//		System.out.println(" distinguishers[2]="+Integer.toString(distinguishers[2])+" distinguishers[3]="+Integer.toString(distinguishers[3])+" distinguishers[4]="+Integer.toString(distinguishers[4]));
+		for (int i = 2; i < 5; i++) {
+			vals[i-2] = distinguishers[i];
+			if (distinguishers[i] > distinguishers[1]) {
+				vals[i-2]--;
+			}
+		}
+//		System.out.println(" vals[0]="+Integer.toString(vals[0])+" vals[1]="+Integer.toString(vals[1])+" vals[2]="+Integer.toString(vals[2]));
+		return	vals[0] * (vals[0]-1) * (vals[0]-2) / 6 +
+				vals[1] * (vals[1]-1) / 2 +
+				vals[2];
+	}
+*/
+
 	
 	public int calculateOnePairRank() {
-		final int maxHighCardRank = 1277; // maximum rank of the next lower showdown category
-		final int maxKickerRank = 880; // maximum rank of 3 card kicker combinations = 12*11*10/3*2*1
+		final int maxHighCardRank = 1276; // maximum rank of the next lower showdown category
+		final int maxKickerRank = 220; // maximum rank of 3 card kicker combinations = 12*11*10/3*2*1
 		int[] vals = new int[3];
 		// Calculate the rank of the three kicker cards
 		// calculations are based on non-ordered combination formula (n!) / ((n-r)!*(r!), n = # of items, r = # of selections
@@ -505,6 +547,9 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 		for (int i = 2; i < 5; i++) {
 //System.out.println("dbg Hand.CalculateOnePairRank(): i="+Integer.toString(i)+" vals:"+Integer.toString(vals.length)+" distinguishers:"+Integer.toString(distinguishers.length));
 			vals[i-2] = distinguishers[i];
+			if (distinguishers[i] > distinguishers[1]) {
+				vals[i-2]--;
+			}
 		}
 		int kickerRank =	vals[0] * (vals[0]-1) * (vals[0]-2) / 6 +
 							vals[1] * (vals[1]-1) / 2 +
@@ -517,7 +562,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 
 	
 	public int calculateTwoPairRank() {
-		final int maxOnePairRank = 4137; // maximum rank of the next lower showdown category
+		final int maxOnePairRank = 4136; // maximum rank of the next lower showdown category
 		final int maxKickerRank = 11; // sum of kicker combinations for each pair set = 13-2 = 11
 		
 		// Calculate the rank of the combination of the two pairs (alone) within the set of pairs
@@ -540,7 +585,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	}
 
 	public int calculateThreeOfAKindRank() {
-		final int maxTwoPairRank = 4995; // maximum rank of the next lower showdown category
+		final int maxTwoPairRank = 4994; // maximum rank of the next lower showdown category
 		final int maxKickerRank = 66;  // sum of kicker combinations for each set of trips = 12*11/2
 		int reducedKicker1 = distinguishers[2];
 		int reducedKicker2 = distinguishers[3];
@@ -558,9 +603,9 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	}
 	
 	public int calculateStraightRank() {
-		final int maxThreeOfAKindRank = 5853;
+		final int maxThreeOfAKindRank = 5852;
 		return 	maxThreeOfAKindRank + 1 + // maximum rank of the next lower showdown category
-				distinguishers[1] - 4; // high card determines remainder of rank, starting with high card 5 as the lowest straight
+				distinguishers[1] - 3; // high card determines remainder of rank, starting with high card 5 as the lowest straight
 	}
 
 	public int calculateFlushRank() {
@@ -570,7 +615,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	}
 	
 	public int calculateFullHouseRank() {
-		final int maxFlushRank = 7140; // maximum rank of the next lower showdown category
+		final int maxFlushRank = 7139; // maximum rank of the next lower showdown category
 		final int maxKickerRank = 12; // 12 combinations of single card = 13 - 1
 		int temp = distinguishers[2];
 		if (distinguishers[2] > distinguishers[1]) {
@@ -582,7 +627,7 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	}
 	
 	public int calculateFourOfAKindRank() {
-		final int maxFullHouseRank = 7296; // maximum rank of the next lower showdown category
+		final int maxFullHouseRank = 7295; // maximum rank of the next lower showdown category
 		final int maxKickerRank = 12; // 12 combinations of remaining kicker;
 		int temp = distinguishers[2];
 		if (distinguishers[2] > distinguishers[1]) {
@@ -594,9 +639,9 @@ public class Hand implements Comparable<Hand>, Comparator<Hand> {
 	}
 	
 	public int calculateStraightFlushRank() {
-		final int maxFourOfAKindRank = 7452; // maximum rank of the next lower showdown category
+		final int maxFourOfAKindRank = 7451; // maximum rank of the next lower showdown category
 		return	maxFourOfAKindRank + 1 + // start at the rank just higher than the lower showdown category
-				distinguishers[1] - 4; // rank within set of straights is based on high card, starting with 5
+				distinguishers[1] - 3; // rank within set of straights is based on high card, starting with 5
 	}
 	
 	public ShowdownCategoryName getShowdownCategoryName() {
