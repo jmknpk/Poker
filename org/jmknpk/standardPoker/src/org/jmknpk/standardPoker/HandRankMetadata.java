@@ -64,9 +64,9 @@ public class HandRankMetadata {
 				handValuesPerRank[rank] = temp;
 
 				tempS = new String[countHandsPerRank];
+				handAbbreviationsPerRank[rank] = new String[tempS.length];
 				for (int j = 0; j < countHandsPerRank; j++) {
 					tempS[j] = hands[i-countHandsPerRank+j+1].getAbbreviation();
-					handAbbreviationsPerRank[rank] = new String[tempS.length];
 					handAbbreviationsPerRank[rank][j] = tempS[j];
 				}
 //				handAbbreviationsPerRank[rank] = tempS;
@@ -91,9 +91,9 @@ public class HandRankMetadata {
 		
 		handValuesPerRank[rank] = temp;
 		tempS = new String[countHandsPerRank];
+		handAbbreviationsPerRank[rank] = new String[tempS.length];
 		for (int j = 0; j < countHandsPerRank; j++) {
 			tempS[j] = hands[hands.length-countHandsPerRank+j].getAbbreviation();
-			handAbbreviationsPerRank[rank] = new String[tempS.length];
 			handAbbreviationsPerRank[rank][j] = tempS[j];
 		}
 

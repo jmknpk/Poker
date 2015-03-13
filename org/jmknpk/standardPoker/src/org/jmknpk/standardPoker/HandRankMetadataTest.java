@@ -12,6 +12,7 @@ public class HandRankMetadataTest {
 		int numberOfHandsBelow;
 		int numberOfHandsAbove;
 		int[] handValues;
+		String[] handAbbreviations;
 		int recount = 0;
 		
 		HandRankMetadata data = new HandRankMetadata();
@@ -23,13 +24,18 @@ public class HandRankMetadataTest {
 			numberOfHandsAbove = data.getNumberOfHandsAbove(i);
 			handValues = new int[data.getNumberOfHands(i)];
 			handValues = data.getHandValues(i);
+			handAbbreviations = new String[data.getNumberOfHands(i)];
+			handAbbreviations = data.getHandAbbreviations(i);
+
 			assertEquals(HandRankMetadata.numberOfHands,numberOfHands+numberOfHandsBelow+numberOfHandsAbove);
+
+			for (int j = 0; j < data.getNumberOfHands(i); j++) {
+				System.out.println(Integer.toString(handValues[j])+" "+handAbbreviations[j]);
+			}
+			
 		}
 		assertEquals(HandRankMetadata.numberOfHands,recount);
 		
-		System.out.println("  Need to build another Junit test on Hand.java");
-		System.out.println("  Need to assure that for each possible hand combination, the rank determines a rank such that");
-		System.out.println("  The array of hands sorted by rank is the same as an array of hands sorted with the intuitive comparator.");
 	}
 
 }
