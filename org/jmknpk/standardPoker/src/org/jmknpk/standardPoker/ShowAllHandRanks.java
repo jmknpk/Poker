@@ -33,20 +33,16 @@ public class ShowAllHandRanks {
 			recount = recount + numberOfHands;
 			numberOfHandsBelow = data.getNumberOfHandsBelow(i);
 			numberOfHandsAbove = data.getNumberOfHandsAbove(i);
-//			handValues = new int[data.getNumberOfHands(i)];
-//			handValues = data.getHandValues(i);
-//			handAbbreviations = new String[data.getNumberOfHands(i)];
-//			handAbbreviations = data.getHandAbbreviations(i);
+			handAbbreviations = new String[data.getNumberOfHands(i)];
+			handAbbreviations = data.getHandAbbreviations(i);
+			Hand oneHand = Hand.getHandFromAbbreviation(handAbbreviations[0]);
 			outString =	"rank="+Integer.toString(i)+
 						" #="+Integer.toString(numberOfHands)+
 						" below="+Integer.toString(numberOfHandsBelow)+
-						" above="+Integer.toString(numberOfHandsAbove);
-/*
-			outString = outString + handAbbreviations[0];
-			for (int j = 1; j < numberOfHands; j++) {
-				outString = outString + ","+handAbbreviations[j];
-			}
-*/
+						" above="+Integer.toString(numberOfHandsAbove)+
+						" Percentage="+
+						String.format("%.4f%%",((double) 100) *(((double) numberOfHandsBelow) / (((double) numberOfHandsBelow) + ((double) numberOfHandsAbove))))+
+						" " + oneHand.getShowdownDescription();
 			try {
 				bw.write(outString,0,outString.length());
 				bw.newLine();

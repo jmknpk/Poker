@@ -108,6 +108,33 @@ public class HandRankMetadata {
 
 	}
 	
+	public boolean equals(HandRankMetadata inData) {
+		if (inData == null) {
+			throw new NullPointerException();
+		}
+		boolean answer = true;
+		for (int i = 0; i < numberOfHandRanks && answer; i++) {
+			if (	numberOfHandsPerRank[i] != inData.getNumberOfHands(i) ||
+					numberOfHandsBelow[i] != inData.getNumberOfHandsBelow(i) ||
+					numberOfHandsAbove[i] != inData.getNumberOfHandsAbove(i) ) {
+				answer = false;
+			} else {
+				int[] tempHandValues = new int[inData.getHandValues(i).length];
+				tempHandValues = inData.getHandValues(i);
+				String[] tempHandAbbreviations = new String[inData.getHandAbbreviations(i).length];
+				tempHandAbbreviations = inData.getHandAbbreviations(i);
+				for (int j = 0; j < tempHandValues.length; j++) {
+					if (!handAbbreviationsPerRank[i][j].equals(tempHandAbbreviations[j]) ||
+						handValuesPerRank[i][j] != tempHandValues[j]) {
+						answer = false;
+					}
+				}
+			}
+		}
+		return answer;
+		
+	}
+	
 	public int getNumberOfHands(int inRank) {
 		if (inRank < 0 || inRank >= numberOfHandRanks) {
 			throw new IllegalArgumentException();
