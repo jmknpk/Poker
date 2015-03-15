@@ -27,7 +27,7 @@ public class ShowAllHandRanks {
 		} catch (IOException e) { };
 
 		
-		HandRankMetadata data = new HandRankMetadata();
+		HandRankMetadata data = new HandRankMetadata(true);
 		for (int i = 0; i < HandRankMetadata.numberOfHandRanks; i++) {
 			numberOfHands = data.getNumberOfHands(i);
 			recount = recount + numberOfHands;
